@@ -11,6 +11,8 @@ const passport = require("passport");
 const LocalStrategy= require("passport-local");
 const User = require("./models/user.js");
 
+require('dotenv').config();
+
 
 const listingRouter= require("./routes/listing.js");
 const reviewRouter= require("./routes/review.js");
@@ -31,7 +33,7 @@ main().then(()=>{
 })
 
 async function main() {
-    await mongoose.connect("mongodb://127.0.0.1:27017/WildCard");
+    await mongoose.connect(process.env.mongodbUrl);
 }
 
 const sessionOptions= {
