@@ -24,6 +24,9 @@ app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
 
+const dbURL= process.env.ATLASDB_URL;
+
+
 main()
   .then(() => {
     console.log("connected to DB");
@@ -32,8 +35,10 @@ main()
     console.log(err);
   });
 
+
+
 async function main() {
-  await mongoose.connect(process.env.MONGODB_URI);
+  await mongoose.connect(dbURL);
 }
 
 const sessionOptions = {
@@ -86,11 +91,8 @@ app.use((req, res, next) => {
   next(new ExpressError(404, "Page not found!"));
 });
 
-app.use((err, req, res, next) => {
-  let { statusCode = 500, message = "Something went wrong" } = err;
-  res.status(statusCode).render("error.ejs", { message });
-});
-
 app.listen(8080, () => {
   console.log("server listening");
 });
+
+module.exports = app;
