@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const initData = require("./data.js");
 const Listing = require("../models/listing.js");
 
-require("dotenv").config();
+
 
 main()
   .then(() => {
@@ -13,15 +13,15 @@ main()
   });
 
 async function main() {
-  await mongoose.connect(process.env.MONGODB_URI);
+  await mongoose.connect("mongodb://127.0.0.1:27017/WildCard");
 }
 
 const initDB = async () => {
   await Listing.deleteMany({});
-  initData.data = initData.data.map((obj) => ({
-    ...obj,
-    owner: "69b5a32e96c8335a41c39db9",
-  }));
+   initData.data = initData.data.map((obj) => ({
+      ...obj,
+      owner:"6a15dfea9e4ea8a1d09d54d3",
+   }));
   await Listing.insertMany(initData.data);
   console.log("initialised");
 };

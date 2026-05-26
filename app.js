@@ -1,3 +1,8 @@
+if(process.env.NODE_ENV !="production"){
+  require('dotenv').config();
+  }
+
+
 const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
@@ -11,7 +16,9 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
 
-require("dotenv").config();
+
+
+
 
 const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
@@ -24,7 +31,7 @@ app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
 
-const dbURL= process.env.ATLASDB_URL;
+
 
 
 main()
@@ -38,7 +45,7 @@ main()
 
 
 async function main() {
-  await mongoose.connect(dbURL);
+  await mongoose.connect("mongodb://127.0.0.1:27017/WildCard");
 }
 
 const sessionOptions = {
