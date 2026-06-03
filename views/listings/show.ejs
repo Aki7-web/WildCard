@@ -25,7 +25,7 @@
     </div>
 <% } %>
 
-<div class="col-8 offset-3 mb-5">
+<div class="col-8 offset-3 mb-4">
     <hr>
     <% if(currUser){ %>
     <h4>Leave a Review</h4>
@@ -60,6 +60,7 @@
     <hr>
     <% } %>
 
+    <% if(listing.reviews.length>0){%>
     <p>
         <b>All Reviews</b>
     </p>
@@ -78,9 +79,26 @@
             </form>
         </div>
         <%}%>
+        <hr class="mt-4">
     </div>
+    <%}%>
+    
 </div>
 
+
+<h5 class="offset-3 mt-3 mb-4"><b>Where you'll be</b></h5>
+<div class="col-8 offset-3 mb-1"><%= listing.location %>,<%= listing.country %></div>
+<div id="map" class="col-8 offset-3 mb-5"></div>
+
+
+
+<script>
+const lat = <%= listing.geometry.lat %>;
+const lng = <%= listing.geometry.lng %>;
+const listingTitle = "<%= listing.title %>";
+</script>
+
+<script src="/js/map.js"></script>
 <script src="/js/script.js"></script>
 
 

@@ -9,18 +9,44 @@ module.exports.newListing= (req,res)=>{
     res.render("listings/new");
 }
 
-module.exports.createListing=async (req, res,next) => {
-    let url= req.file.path;
-    let filename= req.file.filename
-        let listingData = req.body.listing;
+module.exports.createListing = async (req, res, next) => {
+
+    let url = req.file.path;
+    let filename = req.file.filename;
+
+    let listingData = req.body.listing;
+
+    const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
+            listingData.location
+        )}&format=json&limit=1`,
+        {
+            headers: {
+                "User-Agent": "WildCard Project"
+            }
+        }
+    );
+
+    const data = await response.json();
+    console.log(data);
+
     const newListing = new Listing(listingData);
-    //console.log(req.user);
-    newListing.owner= req.user._id;
-    newListing.image= {url, filename};
+
+    if (data.length > 0) {
+        newListing.geometry = {
+            lat: parseFloat(data[0].lat),
+            lng: parseFloat(data[0].lon)
+        };
+    }
+
+    newListing.owner = req.user._id;
+    newListing.image = { url, filename };
+
     await newListing.save();
-    req.flash("success","New Listing Created!");
+
+    req.flash("success", "New Listing Created!");
     res.redirect("/listings");
-}
+};
 
 module.exports.showListing=async(req, res)=>{
     let {id}= req.params;
