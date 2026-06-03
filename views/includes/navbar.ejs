@@ -6,10 +6,15 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link "  href="/listings">Explore</a>
-
-       
+        <a class="nav-link "  href="/listings">Explore</a></div>
+      <div class="navbar-nav ms-auto">
+        <form class="d-flex" role="search">
+        <input class="form-control me-2 input-btn" type="search" placeholder="Search destinations" />
+        <button class="btn search-btn" type="submit"><i class="fa-brands fa-sistrix"></i>Search</button>
+      </form>
       </div>
+      
+
       <div class="navbar-nav ms-auto">
         <a class="nav-link" href="/listings/new">Airbnb your home</a>
         <% if(!currUser){ %>
@@ -24,3 +29,4 @@
     </div>
   </div>
 </nav>
+
