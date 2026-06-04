@@ -87,18 +87,28 @@
 
 
 <h5 class="offset-3 mt-3 mb-4"><b>Where you'll be</b></h5>
-<div class="col-8 offset-3 mb-1"><%= listing.location %>,<%= listing.country %></div>
-<div id="map" class="col-8 offset-3 mb-5"></div>
+<div class="col-8 offset-3 mb-1">
+    <%= listing.location %>, <%= listing.country %>
+</div>
 
+<% if (listing.geometry && listing.geometry.lat && listing.geometry.lng) { %>
 
+    <div id="map" class="col-8 offset-3 mb-5"></div>
 
-<script>
-const lat = <%= listing.geometry.lat %>;
-const lng = <%= listing.geometry.lng %>;
-const listingTitle = "<%= listing.title %>";
-</script>
+    <script>
+        const lat = <%= listing.geometry.lat %>;
+        const lng = <%= listing.geometry.lng %>;
+        const listingTitle = "<%= listing.title %>";
+    </script>
 
-<script src="/js/map.js"></script>
+    <script src="/js/map.js"></script>
+
+<% } else { %>
+
+    <div class="col-8 offset-3 mb-5">
+        <p>Map location unavailable.</p>
+    </div>
+
+<% } %>
+
 <script src="/js/script.js"></script>
-
-

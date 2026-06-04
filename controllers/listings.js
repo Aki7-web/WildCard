@@ -11,35 +11,66 @@ module.exports.newListing= (req,res)=>{
 
 module.exports.createListing = async (req, res, next) => {
 
-    let url = req.file.path;
-    let filename = req.file.filename;
+    // let url = req.file.path;
+    // let filename = req.file.filename;
+
+    let url = req.file?.path;
+    let filename = req.file?.filename;
 
     let listingData = req.body.listing;
 
-    const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
-            listingData.location
-        )}&format=json&limit=1`,
-        {
-            headers: {
-                "User-Agent": "WildCard Project"
-            }
-        }
-    );
+    // const response = await fetch(
+    //     `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
+    //         listingData.location
+    //     )}&format=json&limit=1`,
+    //     {
+    //         headers: {
+    //             "User-Agent": "WildCard Project"
+    //         }
+    //     }
+    // );
 
 
-    console.log("Response status:", response.status);
-    console.log("Content type:", response.headers.get("content-type"));
-    const data = await response.json();
-    //console.log(data);
+    //  const data = await response.json();
+    
+    // const newListing = new Listing(listingData);
+
+    // if (data.length > 0) {
+    //     newListing.geometry = {
+    //         lat: parseFloat(data[0].lat),
+    //         lng: parseFloat(data[0].lon)
+    //     };
+    // }
 
     const newListing = new Listing(listingData);
 
-    if (data.length > 0) {
-        newListing.geometry = {
-            lat: parseFloat(data[0].lat),
-            lng: parseFloat(data[0].lon)
-        };
+    try {
+
+        const response = await fetch(
+            `https://api.geoapify.com/v1/geocode/search?text=${encodeURIComponent(
+                listingData.location
+            )}&apiKey=${process.env.GEOAPIFY_KEY}`
+        );
+
+        if (!response.ok) {
+        throw new Error(`Geoapify API returned ${response.status}`);
+    }
+
+    const data = await response.json();
+
+        if (data.features && data.features.length > 0) {
+
+            newListing.geometry = {
+                lat: data.features[0].properties.lat,
+                lng: data.features[0].properties.lon
+            };
+
+        }
+
+    } catch (err) {
+
+        console.log("Geoapify error:", err.message);
+
     }
 
     newListing.owner = req.user._id;
