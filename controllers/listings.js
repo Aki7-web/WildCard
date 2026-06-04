@@ -27,8 +27,11 @@ module.exports.createListing = async (req, res, next) => {
         }
     );
 
+
+    console.log("Response status:", response.status);
+    console.log("Content type:", response.headers.get("content-type"));
     const data = await response.json();
-    console.log(data);
+    //console.log(data);
 
     const newListing = new Listing(listingData);
 
